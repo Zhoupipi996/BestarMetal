@@ -1,0 +1,5 @@
+# All crawlers, including search and AI crawlers, may access the whole site.
+User-agent: *
+Allow: /
+
+Sitemap: https://bestarmetal.com/sitemap.xml
