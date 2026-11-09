@@ -1,13 +1,21 @@
 # BESTAR METAL
 
-> BESTAR METAL is the brand of Shenzhen Bestar Tek Co. Ltd. It coordinates OEM and ODM custom metal product development, prototyping and manufacturing for overseas B2B customers through its authorized production partner, Dongguan Zhiqin Yipin Hardware Co., Ltd., in Dongguan, China. Factory address: Room 101, Building 5, No. 15 Chaodong Road, Chashan Town, Dongguan City, Guangdong Province, China. Photographs on the website are supplied by the production partner and do not imply design ownership by BESTAR METAL.
+> BESTAR METAL is the brand of Shenzhen Bestar Tek Co. Ltd. It supports OEM and ODM custom metal product development, prototyping and manufacturing for overseas B2B customers, based in Dongguan, Guangdong, China. Visuals outside the Manufacturing page are conceptual illustrations, not photos of specific customer projects.
 
 ## Key pages
 - [Home](https://bestarmetal.com/): OEM/ODM overview and buyer questions
-- [Products](https://bestarmetal.com/products.html): reference products and categories
+- [Products](https://bestarmetal.com/products.html): customization possibilities by category
 - [Design & Engineering](https://bestarmetal.com/design-engineering.html): six-stage process from idea to production
-- [Manufacturing](https://bestarmetal.com/manufacturing.html): partner workshop photographs and production coordination
-- [Industries](https://bestarmetal.com/industries.html): possible applications
+- [Manufacturing](https://bestarmetal.com/manufacturing.html): processes, materials, finishes and quality control
 - [Prototyping](https://bestarmetal.com/prototyping.html): prototypes and small batches; MOQ, costs and lead time evaluated per project
+- [Industries](https://bestarmetal.com/industries.html)
 - [About](https://bestarmetal.com/about.html)
 - [Contact](https://bestarmetal.com/contact.html): marketing@bestarmetal.com, WhatsApp +86 134 7614 4359
+
+## Buyer resources
+- [Resources](https://bestarmetal.com/resources.html)
+- [Buyer FAQ](https://bestarmetal.com/faq.html)
+- [OEM vs ODM metal manufacturing](https://bestarmetal.com/insights/oem-vs-odm-metal-manufacturing.html)
+- [From sketch to custom metal product](https://bestarmetal.com/insights/custom-metal-product-from-sketch.html)
+- [Custom metal furniture manufacturing process](https://bestarmetal.com/insights/custom-metal-furniture-manufacturing-process.html)
+- [How to prepare a custom metal RFQ](https://bestarmetal.com/insights/how-to-prepare-custom-metal-rfq.html)

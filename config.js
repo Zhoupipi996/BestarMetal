@@ -14,11 +14,8 @@ const SITE_CONFIG = {
 
   whatsappDisplay: "+86 134 7614 4359",
 
-  factoryAddress:
-    "Room 101, Building 5, No. 15 Chaodong Road, Chashan Town, Dongguan City, Guangdong Province, China",
-
-  // Authorized production partner (factory) shown on the website
-  factoryName: "Dongguan Zhiqin Yipin Hardware Co., Ltd.",
+  // General location shown on the website (no street address)
+  location: "Dongguan, Guangdong, China",
 
   country: "China",
 
