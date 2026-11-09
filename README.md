@@ -1,24 +1,26 @@
-# BESTAR METAL 官网
+# BESTAR METAL 官网（OEM/ODM 版）
 
-纯 HTML / CSS / JavaScript，部署在 GitHub Pages。
+纯 HTML / CSS / JavaScript，部署在 GitHub Pages。详细报告见上一级的 `BestarMetal-OEM-ODM-实施报告.md`。
 
-## 更新到 GitHub
+## 上传到 GitHub
 1. 把这个文件夹里的**所有内容**（含 `assets` 文件夹和 `.nojekyll`）上传到仓库根目录，覆盖旧文件。
-2. 等 1–3 分钟，强制刷新网站，逐页检查。
+2. 仓库里原有的旧图片文件夹（`assets/images/hero`、`design`、`industries`、`materials`、`processes`、`prototyping`、`production`、`workshop`，以及 `assets/images/products` 里的旧文件）现在没有页面使用。确认新站正常后可以手动删除，我没有替你删除。
+3. 等 1–3 分钟，强制刷新网站，逐页检查。
 
-## Canonical 与域名
-- canonical、og:url、sitemap、robots、llms.txt 都指向 `https://bestarmetal.com`。
-- 域名公开后：`Settings → Pages → Custom domain` 填 `bestarmetal.com`，配置 DNS，等 HTTPS 生效，保留 GitHub 生成的 `CNAME` 文件，然后在 Google Search Console 提交 `https://bestarmetal.com/sitemap.xml`。
-- 注意：域名生效之前，github.io 上的页面 canonical 指向尚未打开的域名，搜索引擎可能忽略它；社交分享图（og:image）也暂时无法加载。
+## 图片
+- 全部使用你提供的真实授权照片，位于 `assets/images/real/`。
+- 我做过处理的文件（原图在你的 ZIP 里没有改动）：
+  - `workshop-15-02-rotated.webp`：原图倒置，已旋转 180°（另有 800px 宽版本）。
+  - `process-17-3-shelving.webp`：从拼图中裁出左侧货架照片。
+  - `process-19-4-worker.webp`、`process-19-4-container.webp`：把拼图拆成两张。
+  - `coffee-tables-detail-26-12-trim.webp`、`nesting-tables-detail-28-11-trim.webp`：裁掉白边。
+- 没有使用：`racks-detail-30-11`（画面里有第三方品牌字样）、`racks-detail-30-22`（两张拼图，内容不能确认是金属货架）、`workshop-15-04`（场景杂乱）。
 
-## 换成真实图片
-- 覆盖 `assets/images/` 里的同名文件，或修改 HTML 里的路径；同时更新 `alt` 和 `width`/`height`。
-- 建议尺寸：首页主图 1920×1080；章节图 1200×800；产品卡片 900×675。
-- 页脚的示意图说明在每个 HTML 文件的页脚中，换成真实照片后可删除。
-- 视频：见 `manufacturing.html` 顶部注释，文件上传后再加 `<video>` 标签。
+## 表单（Formspree）
+把 Formspree 表单地址填入 `config.js` 的 `formspreeEndpoint`。未配置时，表单只提示"未发送"并提供邮件备用链接。配置后请自己提交一条测试询盘并确认邮箱收到。
 
-## 修改联系信息
-改 `config.js`，并在 HTML、`sitemap.xml`、`llms.txt` 里搜索替换旧信息。
+## 统计事件
+页面已预留 `quote_form_submit_success`、`whatsapp_click`、`email_click`、`product_inquiry_click`、`engineering_inquiry_click`。只有在页面里加入 Google Analytics 4（gtag）或 Plausible 之后才会发送，目前没有配置任何统计工具。
 
-## 开启询盘表单
-把 Formspree 地址填入 `config.js` 的 `formspreeEndpoint`。未配置时表单只提示"未发送"，并提供邮件备用链接。
+## 域名（canonical 已指向 bestarmetal.com）
+见 `DOMAIN-MIGRATION-CHECKLIST.md`。

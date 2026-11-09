@@ -13,12 +13,30 @@
   }
   function mailLink() { return C.email ? "mailto:" + C.email : ""; }
 
+  // Analytics hook. Does nothing until a privacy-compliant analytics tool is added to the pages.
+  // Supported when present on the page: gtag (Google Analytics 4) or plausible.
+  function track(name, params) {
+    try {
+      if (typeof window.gtag === "function") { window.gtag("event", name, params || {}); }
+      else if (typeof window.plausible === "function") { window.plausible(name, { props: params || {} }); }
+    } catch (e) { /* never break the page because of analytics */ }
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a,button") : null;
+    if (!a) { return; }
+    var ev = a.getAttribute("data-track");
+    if (!ev) {
+      var k = a.getAttribute("data-site-link");
+      if (k === "whatsapp") { ev = "whatsapp_click"; } else if (k === "email") { ev = "email_click"; }
+    }
+    if (ev) { track(ev, { page: location.pathname }); }
+  });
+
   // 1. Fill shared company info from config.js
   $$("[data-site-text]").forEach(function (el) {
     var v = C[el.getAttribute("data-site-text")];
     if (typeof v === "string" && v) { el.textContent = v; }
   });
-
   $$("[data-site-link]").forEach(function (el) {
     var k = el.getAttribute("data-site-link");
     var href = "";
@@ -30,7 +48,7 @@
       if (k !== "email") { el.setAttribute("target", "_blank"); el.setAttribute("rel", "noopener noreferrer"); }
     } else {
       var box = el.closest("[data-optional]") || el;
-      box.hidden = true; // empty config value: hide the element
+      box.hidden = true;
     }
   });
   var social = $("[data-social-block]");
@@ -68,13 +86,22 @@
   // 5. Footer year
   $$("[data-year]").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
-  // 6. Inquiry form (Formspree). Never shows "success" unless the server confirmed it.
+  // 6. OEM/ODM quote form (Formspree). Never shows "success" unless the server confirmed it.
   var form = $("#inquiry-form");
   if (form) {
     var status = $("#form-status"), note = $("#form-setup-note"), btn = $("button[type=submit]", form);
     var endpoint = C.formspreeEndpoint || "";
     var configured = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint);
     if (note) { note.hidden = configured; }
+
+    // Pre-fill category and source information from the link the visitor used
+    var q = new URLSearchParams(location.search);
+    var cat = q.get("category"), sel = form.elements.product_category;
+    if (cat && sel) { $$("option", sel).forEach(function (o) { if (o.value === cat) { sel.value = cat; } }); }
+    ["from", "utm_source", "utm_medium", "utm_campaign"].forEach(function (k) {
+      var f = form.elements[k]; var v = q.get(k);
+      if (f && v) { f.value = v.slice(0, 80); }
+    });
 
     var show = function (ok, msg, linkHref, linkText) {
       status.hidden = false;
@@ -88,10 +115,10 @@
       status.focus();
     };
     var mailtoFromForm = function (fd) {
-      var lines = ["Name", "Company", "Email", "Country", "Product type", "Estimated quantity", "Project description"];
-      var keys = ["name", "company", "email", "country", "product_type", "quantity", "description"];
-      var body = lines.map(function (l, i) { return l + ": " + (fd.get(keys[i]) || ""); }).join("\n");
-      return mailLink() + "?subject=" + encodeURIComponent("Project inquiry") + "&body=" + encodeURIComponent(body);
+      var labels = ["Name", "Company", "Business email", "Country", "Product category", "OEM or ODM", "Estimated order quantity", "Expected timeline", "Project description"];
+      var keys = ["name", "company", "email", "country", "product_category", "oem_odm", "quantity", "timeline", "description"];
+      var body = labels.map(function (l, i) { return l + ": " + (fd.get(keys[i]) || ""); }).join("\n");
+      return mailLink() + "?subject=" + encodeURIComponent("OEM/ODM project inquiry") + "&body=" + encodeURIComponent(body);
     };
 
     form.addEventListener("submit", function (e) {
@@ -108,7 +135,8 @@
         .then(function (r) {
           if (!r.ok) { throw new Error("bad response"); }
           form.reset();
-          show(true, "Thank you. Your inquiry has been submitted. We will reply by email.");
+          show(true, "Thank you. Your OEM/ODM inquiry has been submitted. We will reply to your business email.");
+          track("quote_form_submit_success", { page: location.pathname });
         })
         .catch(function () {
           show(false, "Your inquiry could not be sent.", mailtoFromForm(fd), "Please send it by email instead.");
