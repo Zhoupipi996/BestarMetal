@@ -357,15 +357,6 @@ textarea{min-height:150px;resize:vertical}
 
 /* ===== v4: Resources, FAQ, articles, manufacturing refinements ===== */
 .nav-menu{gap:18px}
-@media (max-width:1180px){
-  .nav-toggle{display:inline-flex}
-  .nav-menu{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:8px 24px 20px}
-  .nav-menu.is-open{display:flex}
-  .nav-menu li{border-bottom:1px solid var(--line)}
-  .nav-menu a{display:block;padding:14px 0;border-bottom:0}
-  .nav-menu .nav-cta{border-bottom:0;padding-top:16px}
-  .nav-menu a.btn{text-align:center}
-}
 .crumbs span{opacity:.6;margin:0 2px}
 .article{max-width:760px;margin:0 auto}
 .article-meta{font-size:.9rem;color:#9fb0c6;margin:14px 0 0}
@@ -426,3 +417,19 @@ textarea{min-height:150px;resize:vertical}
 
 .afig .fig.r-32{aspect-ratio:3/2}
 .afig .fig--sm{max-width:400px}
+
+/* nav: single row down to 1061px */
+.nav-menu{gap:13px}
+.nav-menu a{font-size:.86rem}
+.nav-menu a.btn{padding:9px 12px}
+.brand{font-size:1.15rem}
+.nav-menu a{white-space:nowrap}
+@media (max-width:1100px){
+  .nav-toggle{display:inline-flex}
+  .nav-menu{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:8px 24px 20px}
+  .nav-menu.is-open{display:flex}
+  .nav-menu li{border-bottom:1px solid var(--line)}
+  .nav-menu a{display:block;padding:14px 0;border-bottom:0;font-size:.95rem}
+  .nav-menu .nav-cta{border-bottom:0;padding-top:16px}
+  .nav-menu a.btn{text-align:center}
+}
