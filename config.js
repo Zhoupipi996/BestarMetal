@@ -32,9 +32,12 @@ const SITE_CONFIG = {
     instagram: ""
   },
 
-  // Paste your Formspree form URL here, e.g. "https://formspree.io/f/abcdwxyz"
-  // Leave empty until the form is set up (see README.md).
-  formspreeEndpoint: "",
+  // RG Forms (Google Apps Script) endpoint that receives website inquiries.
+  // The endpoint is public by design; it contains no password or API key.
+  formEndpoint: "https://script.google.com/macros/s/AKfycbzYgFdLwIjaH81kbjLP2GEDfZPkRgmLkH4-RtQj_E4RNF7d1wfdmZTyHwFMK3F9i3RadQ/exec",
+
+  // Name of the form tab in RG Forms
+  formTab: "contact",
 
   logoPath: "assets/images/logo.png",
 

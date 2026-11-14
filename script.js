@@ -86,18 +86,29 @@
   // 5. Footer year
   $$("[data-year]").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
-  // 6. OEM/ODM quote form (Formspree). Never shows "success" unless the server confirmed it.
+  // 6. OEM/ODM quote form -> RG Forms (Google Apps Script web app).
+  // Shows "success" only when the server answers { result: "success" }.
   var form = $("#inquiry-form");
   if (form) {
     var status = $("#form-status"), note = $("#form-setup-note"), btn = $("button[type=submit]", form);
-    var endpoint = C.formspreeEndpoint || "";
-    var configured = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint);
+    var endpoint = C.formEndpoint || "";
+    var configured = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint);
     if (note) { note.hidden = configured; }
 
     // Pre-fill category and source information from the link the visitor used
     var q = new URLSearchParams(location.search);
+    var catMap = {
+      "Custom Stainless Steel Furniture": "Custom Metal Furniture",
+      "Commercial Stainless Steel Products": "Commercial Stainless Steel  Products",
+      "Custom Architectural Metalwork": "Custom Architectural Metalwork",
+      "Custom Metal Fixtures & Displays": "Metal Shelving & Display Fixtures",
+      "Custom Metal Fabrication": "Other/Not sure yet"
+    };
     var cat = q.get("category"), sel = form.elements.product_category;
-    if (cat && sel) { $$("option", sel).forEach(function (o) { if (o.value === cat) { sel.value = cat; } }); }
+    if (cat && sel) {
+      var want = catMap[cat] || cat;
+      $$("option", sel).forEach(function (o) { if (o.value === want) { sel.value = want; } });
+    }
     ["from", "utm_source", "utm_medium", "utm_campaign"].forEach(function (k) {
       var f = form.elements[k]; var v = q.get(k);
       if (f && v) { f.value = v.slice(0, 80); }
@@ -114,34 +125,73 @@
       }
       status.focus();
     };
-    var mailtoFromForm = function (fd) {
-      var labels = ["Name", "Company", "Business email", "Country", "Product category", "OEM or ODM", "Estimated order quantity", "Expected timeline", "Project description"];
-      var keys = ["name", "company", "email", "country", "product_category", "oem_odm", "quantity", "timeline", "description"];
-      var body = labels.map(function (l, i) { return l + ": " + (fd.get(keys[i]) || ""); }).join("\n");
+    var val = function (name) { return (form.elements[name] && form.elements[name].value || "").trim(); };
+    var sourceNote = function () {
+      var parts = [];
+      ["from", "utm_source", "utm_medium", "utm_campaign"].forEach(function (k) { if (val(k)) { parts.push(k + "=" + val(k)); } });
+      parts.push("page=" + location.pathname);
+      return "\n\n[Website source: " + parts.join("; ") + "]";
+    };
+    // Field keys follow the RG Forms form definition
+    // Cloudflare Turnstile writes its token into a hidden "cf-turnstile-response" field
+    var captchaToken = function () {
+      var el = form.querySelector('[name="cf-turnstile-response"]');
+      return el && el.value ? el.value : "";
+    };
+    var resetCaptcha = function () {
+      try { if (window.turnstile && typeof window.turnstile.reset === "function") { window.turnstile.reset(); } } catch (e) { /* ignore */ }
+    };
+    var payloadFields = function () {
+      return {
+        full_name: val("name"), email: val("email"), phone: val("phone"),
+        project_description: val("description") + sourceNote(),
+        company_name: val("company"), country: val("country"),
+        product_type: val("product_category"), oem_or_odm_requirement: val("oem_odm"),
+        estimated_order_quantity: val("quantity"), expected_timeline: val("timeline"),
+        _hp: val("_hp"),
+        _captcha: captchaToken()
+      };
+    };
+    var mailtoFromForm = function () {
+      var f = payloadFields();
+      var labels = ["Name", "Company", "Business email", "Phone", "Country", "Product type", "OEM or ODM", "Estimated order quantity", "Expected timeline", "Project description"];
+      var keys = ["full_name", "company_name", "email", "phone", "country", "product_type", "oem_or_odm_requirement", "estimated_order_quantity", "expected_timeline", "project_description"];
+      var body = labels.map(function (l, i) { return l + ": " + (f[keys[i]] || ""); }).join("\n");
       return mailLink() + "?subject=" + encodeURIComponent("OEM/ODM project inquiry") + "&body=" + encodeURIComponent(body);
     };
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
-      var fd = new FormData(form);
-      if (fd.get("_gotcha")) { return; } // spam trap filled in: ignore silently
+      if (val("_hp")) { return; } // spam trap filled in: ignore silently
       if (!configured) {
-        show(false, "This form is not connected yet, so nothing has been sent.", mailtoFromForm(fd), "Send these details by email instead.");
+        show(false, "This form is not connected yet, so nothing has been sent.", mailtoFromForm(), "Send these details by email instead.");
+        return;
+      }
+      if (!captchaToken()) {
+        show(false, "Please complete the security check above and submit again.", mailtoFromForm(), "Or send these details by email instead.");
         return;
       }
       btn.disabled = true;
-      fetch(endpoint, { method: "POST", body: fd, headers: { Accept: "application/json" } })
-        .then(function (r) {
-          if (!r.ok) { throw new Error("bad response"); }
+      var ctl = typeof AbortController === "function" ? new AbortController() : null;
+      var timer = ctl ? setTimeout(function () { ctl.abort(); }, 30000) : null;
+      // text/plain avoids a CORS preflight that Google Apps Script cannot answer; the body is still JSON
+      fetch(endpoint, {
+        method: "POST", headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ tab: C.formTab || "contact", fields: payloadFields() }),
+        signal: ctl ? ctl.signal : undefined
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || data.result !== "success") { throw new Error("rejected"); }
           form.reset();
           show(true, "Thank you. Your OEM/ODM inquiry has been submitted. We will reply to your business email.");
           track("quote_form_submit_success", { page: location.pathname });
         })
         .catch(function () {
-          show(false, "Your inquiry could not be sent.", mailtoFromForm(fd), "Please send it by email instead.");
+          show(false, "Your inquiry could not be sent.", mailtoFromForm(), "Please send it by email instead.");
         })
-        .then(function () { btn.disabled = false; });
+        .then(function () { if (timer) { clearTimeout(timer); } btn.disabled = false; resetCaptcha(); });
     });
   }
 })();

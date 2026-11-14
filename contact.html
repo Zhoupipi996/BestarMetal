@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://bestarmetal.com/contact.html">
 <link rel="alternate" hreflang="en" href="https://bestarmetal.com/contact.html">
 <link rel="alternate" hreflang="x-default" href="https://bestarmetal.com/contact.html">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self' file:; style-src 'self' file:; img-src 'self' file: data:; font-src 'self' file:; media-src 'self' file:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io mailto:; base-uri 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self' file: https://challenges.cloudflare.com; style-src 'self' file:; img-src 'self' file: data:; font-src 'self' file:; media-src 'self' file:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#0f2038">
 <meta property="og:type" content="website">
@@ -22,6 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
 <link rel="stylesheet" href="style.css">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -137,21 +138,22 @@
 <h3>Information that helps us review your project</h3><ul class="check"><li>Product type and a short description</li><li>Reference photo, sketch or drawing (sent by email)</li><li>OEM or ODM requirement</li><li>Estimated order quantity and expected timeline</li></ul>
 <p>Not sure what to include? Read <a href="insights/how-to-prepare-custom-metal-rfq.html">how to prepare a custom metal RFQ</a>.</p></div>
 <div id="quote"><h2>OEM/ODM Project Inquiry</h2>
-<p id="form-setup-note" class="note"><strong>Form setup required.</strong> This form is not connected yet. Please use the email or WhatsApp buttons.</p>
+<p id="form-setup-note" class="note"><strong>Form not connected.</strong> Please use the email or WhatsApp buttons.</p>
 <form id="inquiry-form" class="form" method="post" action="mailto:marketing@bestarmetal.com" enctype="text/plain">
-<input type="hidden" name="_subject" value="New OEM/ODM inquiry from the BESTAR METAL website">
 <input type="hidden" name="from" value=""><input type="hidden" name="utm_source" value=""><input type="hidden" name="utm_medium" value=""><input type="hidden" name="utm_campaign" value="">
-<div class="hp" aria-hidden="true"><label for="_gotcha">Leave this field empty</label><input id="_gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
+<div class="hp" aria-hidden="true"><label for="_hp">Leave this field empty</label><input id="_hp" name="_hp" type="text" tabindex="-1" autocomplete="off"></div>
 <div class="form-row"><div><label for="name">Full name <span class="req">*</span></label><input id="name" name="name" type="text" required maxlength="100" autocomplete="name"></div>
 <div><label for="company">Company name <span class="req">*</span></label><input id="company" name="company" type="text" required maxlength="150" autocomplete="organization"></div></div>
 <div class="form-row"><div><label for="email">Business email <span class="req">*</span></label><input id="email" name="email" type="email" required maxlength="150" autocomplete="email"></div>
 <div><label for="country">Country <span class="req">*</span></label><input id="country" name="country" type="text" required maxlength="80" autocomplete="country-name"></div></div>
-<div class="form-row"><div><label for="product_category">Product type <span class="req">*</span></label><select id="product_category" name="product_category" required><option value="">Select...</option><option value="Custom Metal Furniture">Custom Metal Furniture</option><option value="Coffee Tables &amp; Side Tables">Coffee Tables &amp; Side Tables</option><option value="Nesting Tables">Nesting Tables</option><option value="Metal Chairs &amp; Frames">Metal Chairs &amp; Frames</option><option value="Metal Shelving &amp; Display Fixtures">Metal Shelving &amp; Display Fixtures</option><option value="Commercial Stainless Steel Products">Commercial Stainless Steel Products</option><option value="Custom Architectural Metalwork">Custom Architectural Metalwork</option><option value="Other / Not sure yet">Other / Not sure yet</option></select></div>
+<div class="form-row"><div><label for="phone">Phone / WhatsApp (optional)</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div><div></div></div>
+<div class="form-row"><div><label for="product_category">Product type <span class="req">*</span></label><select id="product_category" name="product_category" required><option value="">Select...</option><option value="Custom Metal Furniture">Custom Metal Furniture</option><option value="Coffee Table &amp;Side Tables">Coffee Tables &amp; Side Tables</option><option value="Nesting Tables">Nesting Tables</option><option value="Metal Chairs &amp; Frames">Metal Chairs &amp; Frames</option><option value="Metal Shelving &amp; Display Fixtures">Metal Shelving &amp; Display Fixtures</option><option value="Commercial Stainless Steel  Products">Commercial Stainless Steel Products</option><option value="Custom Architectural Metalwork">Custom Architectural Metalwork</option><option value="Other/Not sure yet">Other / Not sure yet</option></select></div>
 <div><label for="oem_odm">OEM or ODM requirement <span class="req">*</span></label><select id="oem_odm" name="oem_odm" required><option value="">Select...</option><option>OEM: I have a design or drawings</option><option>ODM: I need design development</option><option>Not sure yet</option></select></div></div>
 <div class="form-row"><div><label for="quantity">Estimated order quantity <span class="req">*</span></label><input id="quantity" name="quantity" type="text" required maxlength="80"></div>
 <div><label for="timeline">Expected timeline <span class="req">*</span></label><input id="timeline" name="timeline" type="text" required maxlength="80"></div></div>
 <div><label for="description">Project description <span class="req">*</span></label><textarea id="description" name="description" required maxlength="4000"></textarea></div>
 <p class="note">To send drawings or reference images, email them to <a data-site-link="email" href="mailto:marketing@bestarmetal.com"><span data-site-text="email">marketing@bestarmetal.com</span></a> after submitting this form. We use your details only to respond to your inquiry; see our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+<div class="cf-turnstile" data-sitekey="0x4AAAAAAGA1BYM5tA47qZpj"></div>
 <button class="btn" type="submit">Request OEM/ODM Quote</button>
 <div id="form-status" class="form-status" role="status" tabindex="-1" hidden></div></form></div></div></div></section>
 <section class="section section--warm"><div class="container"><div class="section-head"><h2>Frequently Asked Questions</h2></div><div class="grid grid-2 faq"><div><h3>What should I include in my inquiry?</h3><p>Your product type, a project description, whether you need OEM or ODM, your estimated order quantity and expected timeline. A reference photo, sketch or drawing helps; please email it after the first contact.</p></div><div><h3>Can I upload drawings in the form?</h3><p>The form does not include file uploads. Please email drawings and reference images to marketing@bestarmetal.com after submitting the form, or send them by WhatsApp.</p></div></div></div></section>
